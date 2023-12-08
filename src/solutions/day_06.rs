@@ -39,7 +39,11 @@ impl<'a> Solver<'a> for DaySixSolver {
         let res: u64 = times
             .iter()
             .zip(distances.iter())
-            .map(|(&t, &d)| find_solutions(d + 1, t).unwrap())
+            .map(|(&t, &d)| {
+                // We want to beat the previous record by at least one.
+                let target_distance = d + 1;
+                find_solutions(target_distance, t).unwrap()
+            })
             .reduce(|acc, solution| acc * solution)
             .unwrap();
 
@@ -54,7 +58,7 @@ impl<'a> Solver<'a> for DaySixSolver {
             .join("")
             .parse()
             .unwrap();
-        let distance = input[1]
+        let distance: u64 = input[1]
             .split_whitespace()
             .skip(1)
             .collect::<Vec<&str>>()
@@ -62,7 +66,7 @@ impl<'a> Solver<'a> for DaySixSolver {
             .parse()
             .unwrap();
 
-        let res = find_solutions(distance, time).unwrap();
+        let res = find_solutions(distance + 1, time).unwrap();
 
         Ok(res.to_string())
     }
