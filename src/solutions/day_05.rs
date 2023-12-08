@@ -45,19 +45,19 @@ impl Almanac {
             MapsIdentifier::TemperatureToHumidity,
             MapsIdentifier::HumidityToLocation,
         ]
-            .iter()
-            .map(|maps_identifier| self.maps.get(maps_identifier).unwrap())
-            .fold(seed, |last_dest, maps| {
-                maps.iter()
-                    .find_map(|(range, dest)| {
-                        if range.contains(&last_dest) {
-                            Some(last_dest - range.start + dest)
-                        } else {
-                            None
-                        }
-                    })
-                    .unwrap_or(last_dest)
-            })
+        .iter()
+        .map(|maps_identifier| self.maps.get(maps_identifier).unwrap())
+        .fold(seed, |last_dest, maps| {
+            maps.iter()
+                .find_map(|(range, dest)| {
+                    if range.contains(&last_dest) {
+                        Some(last_dest - range.start + dest)
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or(last_dest)
+        })
     }
 
     fn find_min_location_in_seed_range(&self, left: u64, right: u64) -> u64 {
@@ -126,10 +126,7 @@ impl<'a> Solver<'a> for DayFiveSolver {
 
         let res = seeds
             .iter()
-            .map(|seed| {
-                let dest = almanac.find_dest(*seed);
-                dest
-            })
+            .map(|seed| almanac.find_dest(*seed))
             .min()
             .unwrap();
 

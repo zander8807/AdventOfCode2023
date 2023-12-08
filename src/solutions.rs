@@ -3,6 +3,7 @@ pub mod day_02;
 pub mod day_03;
 pub mod day_04;
 pub mod day_05;
+pub mod day_06;
 
 pub trait Solver<'a> {
     fn part_1(&self, input: &'a [&'a str]) -> Result<String, ()>;
