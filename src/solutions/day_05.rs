@@ -1,4 +1,4 @@
-use std::{collections::{HashMap}, str::FromStr, sync::{Arc}, ops::Range};
+use std::{collections::HashMap, str::FromStr, ops::Range};
 
 use super::Solver;
 
@@ -147,7 +147,7 @@ impl<'a> Solver<'a> for DayFiveSolver {
             .map(|chunk| (chunk[0], chunk[1]))
             .collect();
 
-        let almanac = Arc::new(Almanac::new_from_lines(&input[1..]));
+        let almanac = Almanac::new_from_lines(&input[1..]);
                 
         let mut min = u64::MAX;
         for (seed_start, range) in seed_ranges {
