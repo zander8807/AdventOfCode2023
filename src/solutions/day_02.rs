@@ -43,11 +43,10 @@ struct Game {
 
 impl Game {
     fn is_possible(&self, set: &Set) -> bool {
-        !self.sets
+        !self
+            .sets
             .iter()
-            .any(|s| {
-                s.red > set.red || s.green > set.green || s.blue > set.blue
-            })
+            .any(|s| s.red > set.red || s.green > set.green || s.blue > set.blue)
     }
 
     fn find_max_set(&self) -> Set {

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, str::FromStr, ops::Range};
+use std::{collections::HashMap, ops::Range, str::FromStr};
 
 use super::Solver;
 
@@ -36,7 +36,7 @@ struct Almanac {
 
 impl Almanac {
     fn find_dest(&self, seed: u64) -> u64 {
-        let maps_sequence = [
+        [
             MapsIdentifier::SeedToSoil,
             MapsIdentifier::SoilToFertilizer,
             MapsIdentifier::FertilizerToWater,
@@ -44,25 +44,20 @@ impl Almanac {
             MapsIdentifier::LightToTemperature,
             MapsIdentifier::TemperatureToHumidity,
             MapsIdentifier::HumidityToLocation,
-        ];
-
-        let mut last_dest = seed;
-        for map_identifier in maps_sequence {
-            last_dest = self.maps
-                .get(&map_identifier)
-                .expect("should be present")
-                .iter()
-                .find_map(|(range, dest)| {
-                    if range.contains(&last_dest) {
-                        Some(last_dest - range.start + dest)
-                    } else {
-                        None
-                    }
-                })
-                .unwrap_or(last_dest)
-        }
-
-        last_dest
+        ]
+            .iter()
+            .map(|maps_identifier| self.maps.get(maps_identifier).unwrap())
+            .fold(seed, |last_dest, maps| {
+                maps.iter()
+                    .find_map(|(range, dest)| {
+                        if range.contains(&last_dest) {
+                            Some(last_dest - range.start + dest)
+                        } else {
+                            None
+                        }
+                    })
+                    .unwrap_or(last_dest)
+            })
     }
 
     fn find_min_in_seed_range(&self, left: u64, right: u64, min: u64) -> u64 {
@@ -70,7 +65,7 @@ impl Almanac {
         let right_val = self.find_dest(right);
 
         let is_linearly_increasing = right_val > left_val && right_val - left_val == right - left;
-        if  is_linearly_increasing || left == right {
+        if is_linearly_increasing || left == right {
             // since a range should be linearly increasing, we can stop execution once we find a case where
             // the difference between the two values is equal to the range size
             return min.min(left_val);
@@ -104,7 +99,8 @@ impl Almanac {
             }
         }
 
-        maps.values_mut().into_iter()
+        maps.values_mut()
+            .into_iter()
             .for_each(|map| map.sort_by_key(|k| k.0.start));
         Almanac { maps }
     }
@@ -115,7 +111,8 @@ pub struct DayFiveSolver {}
 impl<'a> Solver<'a> for DayFiveSolver {
     fn part_1(&self, input: &'a [&'a str]) -> Result<String, ()> {
         let seeds: Vec<u64> = input[0]
-            .split(':').nth(1)
+            .split(':')
+            .nth(1)
             .unwrap()
             .split_ascii_whitespace()
             .map(|s| s.parse().map_err(|_| ()))
@@ -138,7 +135,8 @@ impl<'a> Solver<'a> for DayFiveSolver {
 
     fn part_2(&self, input: &'a [&'a str]) -> Result<String, ()> {
         let seed_ranges: Vec<(u64, u64)> = input[0]
-            .split(':').nth(1)
+            .split(':')
+            .nth(1)
             .unwrap()
             .split_ascii_whitespace()
             .map(|s| s.parse().map_err(|_| ()))
@@ -148,7 +146,7 @@ impl<'a> Solver<'a> for DayFiveSolver {
             .collect();
 
         let almanac = Almanac::new_from_lines(&input[1..]);
-                
+
         let mut min = u64::MAX;
         for (seed_start, range) in seed_ranges {
             min = min.min(almanac.find_min_in_seed_range(seed_start, seed_start + range, u64::MAX))
@@ -160,7 +158,7 @@ impl<'a> Solver<'a> for DayFiveSolver {
 
 #[cfg(test)]
 mod tests {
-    use crate::solutions::{normalize_input, Solver}; 
+    use crate::solutions::{normalize_input, Solver};
 
     use super::DayFiveSolver;
 

@@ -3,8 +3,8 @@ mod solutions;
 use std::{env, fs};
 
 use solutions::{
-    day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver, day_05::DayFiveSolver,
-    Solver,
+    day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver,
+    day_05::DayFiveSolver, Solver,
 };
 
 use crate::solutions::normalize_input;

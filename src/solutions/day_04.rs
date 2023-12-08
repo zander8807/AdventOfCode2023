@@ -26,10 +26,7 @@ fn num_matches<'a>(winning_nums: &'a [u64], scratch_nums: &'a [u64]) -> u32 {
     let winning_nums = winning_nums.iter().cloned().collect::<HashSet<u64>>();
     let scratch_nums = scratch_nums.iter().cloned().collect::<HashSet<u64>>();
 
-    winning_nums
-        .intersection(&scratch_nums)
-        .cloned()
-        .count() as u32
+    winning_nums.intersection(&scratch_nums).cloned().count() as u32
 }
 
 fn calculate_score<'a>(winning_nums: &'a [u64], scratch_nums: &'a [u64]) -> u64 {
@@ -50,7 +47,6 @@ impl<'a> Solver<'a> for DayFourSolver {
             .map(|line| {
                 let (winning_nums, scratch_nums) = parse_line(line);
 
-                
                 calculate_score(&winning_nums, &scratch_nums)
             })
             .sum();
