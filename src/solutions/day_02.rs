@@ -13,14 +13,14 @@ impl FromStr for Set {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let split: Vec<&str> = s.trim().split(",").map(|s| s.trim()).collect();
+        let split: Vec<&str> = s.trim().split(',').map(|s| s.trim()).collect();
 
         let mut red: i64 = 0;
         let mut green: i64 = 0;
         let mut blue: i64 = 0;
 
         for s in split {
-            let mut val_color_split = s.split(" ");
+            let mut val_color_split = s.split(' ');
             let val: i64 = val_color_split.next().unwrap().parse().unwrap();
             let color = val_color_split.next().unwrap();
 
@@ -43,16 +43,14 @@ struct Game {
 
 impl Game {
     fn is_possible(&self, set: &Set) -> bool {
-        self.sets
+        !self.sets
             .iter()
-            .find(|s| {
-                let not_possible = s.red > set.red || s.green > set.green || s.blue > set.blue;
-                not_possible
+            .any(|s| {
+                s.red > set.red || s.green > set.green || s.blue > set.blue
             })
-            .is_none()
     }
 
-    fn find_max_set<'a>(&self) -> Set {
+    fn find_max_set(&self) -> Set {
         let mut max_set = Set {
             red: 0,
             green: 0,

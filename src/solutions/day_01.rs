@@ -43,7 +43,7 @@ struct CalibrationValue {
 }
 
 impl CalibrationValue {
-    fn find_number<'a>(&self, chars: &[char], is_reversed: bool) -> Option<i64> {
+    fn find_number(&self, chars: &[char], is_reversed: bool) -> Option<i64> {
         // if we don't need to worry about parsing the words, let's just find the first occurrence of numbers
         if !self.parse_words {
             return chars
@@ -57,18 +57,16 @@ impl CalibrationValue {
                 return Some(chars[i].to_digit(10).unwrap().into());
             }
             let mut curr_str = "".to_string();
-            for curr_i in i..usize::min(i + 5, chars.len()) {
-                let curr_char = chars[curr_i];
-
+            for curr_char in chars.iter().skip(i).take(5).copied() {
                 curr_str.push(curr_char);
-                if is_reversed {
-                    if let Some(num) = WORD_TO_NUM_REV.get(&*curr_str) {
-                        return Some(*num);
-                    }
+                let num = if is_reversed {
+                    WORD_TO_NUM_REV.get(&*curr_str)
                 } else {
-                    if let Some(num) = WORD_TO_NUM.get(&*curr_str) {
-                        return Some(*num);
-                    }
+                    WORD_TO_NUM.get(&*curr_str)
+                };
+
+                if let Some(num) = num {
+                    return Some(*num);
                 }
             }
         }

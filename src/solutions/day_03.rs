@@ -102,8 +102,8 @@ impl<'a> Schematic {
         let mut val_string: String = String::default();
 
         // find parts
-        for y in 0..s.len() {
-            for (x, c) in s[y].char_indices() {
+        for (y, val) in s.iter().enumerate() {
+            for (x, c) in val.char_indices() {
                 let x = x as u64;
                 let y = y as u64;
 
@@ -192,7 +192,7 @@ mod tests {
 
     use super::DayThreeSolver;
 
-    const INPUT: &'static str = "
+    const INPUT: &str = "
     467..114..
     ...*......
     ..35..633.

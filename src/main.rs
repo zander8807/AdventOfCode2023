@@ -3,7 +3,7 @@ mod solutions;
 use std::{env, fs};
 
 use solutions::{
-    day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver,
+    day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver, day_05::DayFiveSolver,
     Solver,
 };
 
@@ -33,12 +33,13 @@ fn main() {
     println!("Solution is {}", solution);
 }
 
-fn provide_solver<'a>(day: &'a str) -> Box<dyn Solver> {
+fn provide_solver(day: &str) -> Box<dyn Solver> {
     match day {
         "1" => Box::new(DayOneSolver {}),
         "2" => Box::new(DayTwoSolver {}),
         "3" => Box::new(DayThreeSolver {}),
         "4" => Box::new(DayFourSolver {}),
+        "5" => Box::new(DayFiveSolver {}),
         _ => todo!(),
     }
 }

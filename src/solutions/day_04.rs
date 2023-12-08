@@ -1,23 +1,20 @@
-use core::num;
-use std::{collections::HashSet, iter, str::FromStr};
+use std::collections::HashSet;
 
 use super::Solver;
 
-fn parse_line<'a>(s: &'a str) -> (Vec<u64>, Vec<u64>) {
+fn parse_line(s: &str) -> (Vec<u64>, Vec<u64>) {
     let mut split = s.split(" | ");
 
     let (winning_nums_raw, scratch_nums_raw) = (split.next().unwrap(), split.next().unwrap());
 
-    let winning_nums_raw = winning_nums_raw.split(":").last().unwrap();
+    let winning_nums_raw = winning_nums_raw.split(':').last().unwrap();
 
     let winning_nums = winning_nums_raw
-        .trim()
         .split_whitespace()
         .map(|s| s.parse().unwrap())
         .collect::<Vec<u64>>();
 
     let scratch_nums: Vec<u64> = scratch_nums_raw
-        .trim()
         .split_whitespace()
         .map(|s| s.parse().unwrap())
         .collect::<Vec<u64>>();
@@ -29,12 +26,10 @@ fn num_matches<'a>(winning_nums: &'a [u64], scratch_nums: &'a [u64]) -> u32 {
     let winning_nums = winning_nums.iter().cloned().collect::<HashSet<u64>>();
     let scratch_nums = scratch_nums.iter().cloned().collect::<HashSet<u64>>();
 
-    let matching_numbers = winning_nums
+    winning_nums
         .intersection(&scratch_nums)
         .cloned()
-        .collect::<Vec<u64>>();
-
-    matching_numbers.len() as u32
+        .count() as u32
 }
 
 fn calculate_score<'a>(winning_nums: &'a [u64], scratch_nums: &'a [u64]) -> u64 {
@@ -42,7 +37,7 @@ fn calculate_score<'a>(winning_nums: &'a [u64], scratch_nums: &'a [u64]) -> u64 
     if matching_numbers_count == 0 {
         0
     } else {
-        (2 as u64).pow(matching_numbers_count - 1)
+        2_u64.pow(matching_numbers_count - 1)
     }
 }
 
@@ -55,8 +50,8 @@ impl<'a> Solver<'a> for DayFourSolver {
             .map(|line| {
                 let (winning_nums, scratch_nums) = parse_line(line);
 
-                let score = calculate_score(&winning_nums, &scratch_nums);
-                score
+                
+                calculate_score(&winning_nums, &scratch_nums)
             })
             .sum();
 
@@ -64,7 +59,7 @@ impl<'a> Solver<'a> for DayFourSolver {
     }
 
     fn part_2(&self, input: &'a [&'a str]) -> Result<String, ()> {
-        let mut num_of_instances = vec![1 as u32; input.len()];
+        let mut num_of_instances = vec![1_u32; input.len()];
 
         let all_matches = input
             .iter()
@@ -103,7 +98,7 @@ mod tests {
 
     use super::DayFourSolver;
 
-    const INPUT: &'static str = "
+    const INPUT: &str = "
         Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
         Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
         Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
