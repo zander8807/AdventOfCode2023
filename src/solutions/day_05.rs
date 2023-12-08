@@ -60,20 +60,24 @@ impl Almanac {
             })
     }
 
-    fn find_min_in_seed_range(&self, left: u64, right: u64, min: u64) -> u64 {
+    fn find_min_location_in_seed_range(&self, left: u64, right: u64) -> u64 {
+        self.find_min_location_in_seed_range_impl(left, right, u64::MAX)
+    }
+
+    fn find_min_location_in_seed_range_impl(&self, left: u64, right: u64, min: u64) -> u64 {
         let left_val = self.find_dest(left);
         let right_val = self.find_dest(right);
 
         let is_linearly_increasing = right_val > left_val && right_val - left_val == right - left;
-        if is_linearly_increasing || left == right {
+        if is_linearly_increasing || right <= left {
             // since a range should be linearly increasing, we can stop execution once we find a case where
             // the difference between the two values is equal to the range size
             return min.min(left_val);
         };
 
         let mid_point = (right - left) / 2;
-        let left_min = self.find_min_in_seed_range(left, left + mid_point, min);
-        let right_min = self.find_min_in_seed_range(left + mid_point + 1, right, min);
+        let left_min = self.find_min_location_in_seed_range_impl(left, left + mid_point, min);
+        let right_min = self.find_min_location_in_seed_range_impl(left + mid_point + 1, right, min);
         left_min.min(right_min)
     }
 
@@ -124,7 +128,6 @@ impl<'a> Solver<'a> for DayFiveSolver {
             .iter()
             .map(|seed| {
                 let dest = almanac.find_dest(*seed);
-                println!("seed {} goes to location {}", seed, dest);
                 dest
             })
             .min()
@@ -149,7 +152,7 @@ impl<'a> Solver<'a> for DayFiveSolver {
 
         let mut min = u64::MAX;
         for (seed_start, range) in seed_ranges {
-            min = min.min(almanac.find_min_in_seed_range(seed_start, seed_start + range, u64::MAX))
+            min = min.min(almanac.find_min_location_in_seed_range(seed_start, seed_start + range))
         }
 
         Ok(min.to_string())

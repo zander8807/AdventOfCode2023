@@ -1,6 +1,6 @@
 mod solutions;
 
-use std::{env, fs};
+use std::{env, fs, path::Path};
 
 use solutions::{
     day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver,
@@ -16,7 +16,8 @@ fn main() {
     let day = day_part_split.0;
     let part = day_part_split.1;
 
-    let input_path = &args[2];
+    let path_string = format!("resources/inputs/day{}.txt", day).clone();
+    let input_path = Path::new(&path_string);
     let input = fs::read_to_string(input_path).unwrap();
     let input = normalize_input(&input).unwrap();
 
