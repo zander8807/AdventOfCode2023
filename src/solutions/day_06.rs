@@ -3,6 +3,14 @@ use super::Solver;
 pub struct DaySixSolver {}
 
 fn find_solutions(distance: u64, total_duration: u64) -> Option<u64> {
+    // v0 = t, where t = how long the button is pressed
+    // distance = v0*(total_duration - t), where total_duration is the length
+    //   of the race and d is the distance we're solving for
+    //
+    // distance = t(total_duration - t) = t*total_duration - t^2
+    // solving for t will give us the min and max values we can hold
+    // the button for.
+
     let a = 1.0;
     let b = -(total_duration as f64);
     let c = distance as f64;

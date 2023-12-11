@@ -4,7 +4,7 @@ use std::{env, fs, path::Path};
 
 use solutions::{
     day_01::DayOneSolver, day_02::DayTwoSolver, day_03::DayThreeSolver, day_04::DayFourSolver,
-    day_05::DayFiveSolver, day_06::DaySixSolver, Solver,
+    day_05::DayFiveSolver, day_06::DaySixSolver, day_07::DaySevenSolver, Solver,
 };
 
 use crate::solutions::normalize_input;
@@ -42,6 +42,7 @@ fn provide_solver(day: &str) -> Box<dyn Solver> {
         "4" => Box::new(DayFourSolver {}),
         "5" => Box::new(DayFiveSolver {}),
         "6" => Box::new(DaySixSolver {}),
+        "7" => Box::new(DaySevenSolver {}),
         _ => todo!(),
     }
 }
